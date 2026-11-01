@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CookieMute test page</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background: #f4f0e8;
+    color: #201d18;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 32px;
+    border-bottom: 1px solid rgba(32, 29, 24, .12);
+    background: #f4f0e8;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: .12em;
+  }
+  .brandMark {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: conic-gradient(from 210deg, #1b4fd8 0 50%, #e8b44c 50% 100%);
+    box-shadow: inset 0 0 0 6px #f4f0e8;
+  }
+  .reviewNote {
+    max-width: 560px;
+    margin: 0;
+    color: #575047;
+    font-size: 12px;
+    line-height: 1.45;
+    text-align: right;
+  }
+  main {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 44px 32px 120px;
+  }
+  .kicker {
+    color: #8a5a2b;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 18px 0 18px;
+    max-width: 760px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(42px, 6vw, 74px);
+    line-height: .98;
+    letter-spacing: -.035em;
+    font-weight: 400;
+  }
+  h1 em { font-style: italic; color: #1b4fd8; }
+  .dek {
+    max-width: 620px;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #4d463d;
+  }
+  .byline {
+    margin-top: 24px;
+    color: #746b60;
+    font-size: 13px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-top: 44px;
+  }
+  .card {
+    padding-top: 16px;
+    border-top: 1px solid rgba(32, 29, 24, .16);
+  }
+  .card span {
+    display: block;
+    color: #8a5a2b;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .card b {
+    display: block;
+    margin-top: 7px;
+    font-family: Georgia, serif;
+    font-size: 19px;
+    font-weight: 400;
+  }
+  .card p { margin: 6px 0 0; color: #6d6459; font-size: 13px; line-height: 1.5; }
+  #status {
+    margin-top: 36px;
+    padding: 14px 16px;
+    border: 1px solid rgba(32, 29, 24, .14);
+    border-radius: 8px;
+    background: #fffefb;
+    color: #575047;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  #status.ok { border-color: #9ed8b1; background: #eefaf1; color: #1a6b33; }
+  #status.bad { border-color: #f0b3ae; background: #fff3f2; color: #a32920; }
+
+  /* Didomi-style consent layer used by the extension rules */
+  #didomi-host {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 24px;
+    background: linear-gradient(to top, rgba(20, 17, 13, .42), rgba(20, 17, 13, 0) 62%);
+  }
+  #didomi-popup {
+    width: min(920px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    padding: 26px 30px 24px;
+    border: 1px solid rgba(32, 29, 24, .1);
+    border-radius: 12px;
+    background: #fffefb;
+    box-shadow: 0 28px 80px rgba(20, 17, 13, .35);
+  }
+  #didomi-popup h2 {
+    margin: 0 0 8px;
+    font-family: Georgia, serif;
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: -.01em;
+  }
+  #didomi-popup p { margin: 0; max-width: 760px; color: #5b554c; font-size: 14px; line-height: 1.55; }
+  #didomi-popup a { color: #8a5a2b; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 20px; }
+  .actions button {
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 7px;
+    font: 600 14px/1 inherit;
+    cursor: pointer;
+  }
+  #didomi-notice-agree-button { border: 1px solid #1b4fd8; background: #1b4fd8; color: #fff; }
+  #didomi-notice-learn-more-button { border: 1px solid #cfc8bc; background: transparent; color: #322e28; }
+  .didomi-continue-without-agreeing {
+    min-height: 42px;
+    margin-left: auto;
+    padding: 0 2px;
+    border: 0;
+    background: transparent;
+    color: #5b554c;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+  }
+  .didomi-continue-without-agreeing:hover { color: #201d18; }
+  @media (max-width: 640px) {
+    header { align-items: flex-start; flex-direction: column; padding: 16px 20px; }
+    .reviewNote { text-align: left; }
+    main { padding: 32px 20px 100px; }
+    #didomi-host { padding: 12px; }
+    #didomi-popup { padding: 22px 20px; }
+    .didomi-continue-without-agreeing { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brandMark"></div>CookieMute</div>
+  <p class="reviewNote">Test page: a sample cookie banner is shown below. With CookieMute installed, it should be rejected automatically. The status line under the article reports what happened.</p>
+</header>
+
+<main>
+  <div class="kicker">City guide · 6 min</div>
+  <h1>Un week-end <em>lent</em> à Lyon</h1>
+  <p class="dek">Trois jours entre les traboules de la Croix-Rousse, les quais de Saône et les tables qui ne pressent personne.</p>
+  <div class="byline">Par Camille Roux · 12 octobre</div>
+
+  <section class="cards">
+    <div class="card"><span>Où dormir</span><b>Une chambre sous les toits</b><p>Des hôtels de poche, à deux pas des pentes.</p></div>
+    <div class="card"><span>Où manger</span><b>Le bouchon du dimanche</b><p>Une table simple, des assiettes qui circulent.</p></div>
+    <div class="card"><span>À faire</span><b>Descendre sans se presser</b><p>Les escaliers de la Croix-Rousse au matin.</p></div>
+  </section>
+
+  <div id="status" aria-live="polite">Waiting for the cookie banner…</div>
+</main>
+
+<div id="didomi-host">
+  <div id="didomi-popup" class="didomi-popup-backdrop" role="dialog" aria-modal="true" aria-label="Votre vie privée">
+    <div class="didomi-popup-view" role="document">
+      <h2>Votre vie privée compte</h2>
+      <p>Nous utilisons des cookies pour mesurer l'audience et améliorer votre expérience. Vous pouvez accepter, personnaliser ou continuer sans accepter. <a href="#" id="didomi-learn-more-link">En savoir plus</a>.</p>
+      <div class="actions">
+        <button id="didomi-notice-agree-button" type="button">Tout accepter</button>
+        <button id="didomi-notice-learn-more-button" type="button">Paramétrer</button>
+        <button id="didomi-notice-disagree-button" class="didomi-continue-without-agreeing" type="button">Continuer sans accepter →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.__demoLog = [];
+  const status = document.getElementById('status');
+  const host = document.getElementById('didomi-host');
+  const log = (name) => { window.__demoLog.push(name); };
+
+  function finish(name, message, kind) {
+    log(name);
+    if (host) host.remove();
+    status.textContent = message;
+    status.className = kind || '';
+  }
+
+  document.getElementById('didomi-notice-agree-button').onclick = () => {
+    finish('accept', 'Accept was clicked. CookieMute did not reject this banner.', 'bad');
+  };
+  document.getElementById('didomi-notice-learn-more-button').onclick = () => {
+    log('manage');
+    status.textContent = 'Manage preferences was clicked. The banner is still open.';
+    status.className = '';
+  };
+  document.getElementById('didomi-notice-disagree-button').onclick = () => {
+    finish('didomi-rejected', 'Rejected automatically. CookieMute handled the banner correctly.', 'ok');
+  };
+</script>
+</body>
+</html>
